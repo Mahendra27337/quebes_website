@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DigitalProduct, DigitalPurchase
+from .models import DigitalProduct, DigitalPurchase, DigitalProductMilestone
 
 
 @admin.register(DigitalProduct)
@@ -15,6 +15,13 @@ class DigitalProductAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
 
 
+@admin.register(DigitalProductMilestone)
+class DigitalProductMilestoneAdmin(admin.ModelAdmin):
+    list_display = ('id', 'digital_product', 'milestone_name', 'milestone_type', 'milestone_payout')
+    list_filter = ('milestone_type',)
+    search_fields = ('milestone_name', 'digital_product__product_name')
+
+
 @admin.register(DigitalPurchase)
 class DigitalPurchaseAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'user_id', 'status', 'fraud_flag', 'created_at')
@@ -22,3 +29,4 @@ class DigitalPurchaseAdmin(admin.ModelAdmin):
     search_fields = ('user_id', 'product__product_name', 'android_id', 'imei_number')
     readonly_fields = ('created_at',)
     ordering = ('-created_at',)
+

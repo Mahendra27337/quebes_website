@@ -9,10 +9,6 @@ class DigitalProduct(models.Model):
     company_name = models.CharField(max_length=255)
     brand_information = models.TextField(blank=True, null=True)
     sku_description = models.TextField(blank=True, null=True)
-    milestone_name = models.CharField(max_length=255, blank=True, null=True)
-    milestone_type = models.CharField(max_length=100, blank=True, null=True)
-    milestone_description = models.TextField(blank=True, null=True)
-    milestone_payout = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     terms_conditions = models.TextField(blank=True, null=True)
     how_to_earn = models.TextField(blank=True, null=True)
     whom_to_sell = models.TextField(blank=True, null=True)
@@ -68,6 +64,17 @@ class DigitalProduct(models.Model):
 
     def __str__(self):
         return self.product_name
+
+
+class DigitalProductMilestone(models.Model):
+    digital_product = models.ForeignKey(DigitalProduct, on_delete=models.CASCADE, related_name="milestones")
+    milestone_name = models.CharField(max_length=255)
+    milestone_type = models.CharField(max_length=100)
+    milestone_description = models.TextField(blank=True, null=True)
+    milestone_payout = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.digital_product.product_name} - {self.milestone_name}"
 
 
 class DigitalPurchase(models.Model):
