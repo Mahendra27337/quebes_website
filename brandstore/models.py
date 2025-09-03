@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class BrandStore(models.Model):
     brand_store_id = models.AutoField(primary_key=True)
     store_offer_name = models.CharField(max_length=255)
@@ -7,10 +8,6 @@ class BrandStore(models.Model):
     company_name = models.CharField(max_length=255)
     offer_brand_info = models.TextField(blank=True, null=True)
     offer_brand_benefits = models.TextField(blank=True, null=True)
-    milestone_name = models.CharField(max_length=255, blank=True, null=True)
-    milestone_type = models.CharField(max_length=100, blank=True, null=True)
-    brand_store_milestone_description = models.TextField(blank=True, null=True)
-    milestone_payout = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
     # Tracking info
     android_id = models.CharField(max_length=255, blank=True, null=True)
@@ -67,3 +64,14 @@ class BrandStore(models.Model):
 
     def __str__(self):
         return self.store_offer_name
+
+
+class BrandStoreMilestone(models.Model):
+    brand_store = models.ForeignKey(BrandStore, related_name="milestones", on_delete=models.CASCADE)
+    milestone_name = models.CharField(max_length=255)
+    milestone_type = models.CharField(max_length=100, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    payout = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+
+    def __str__(self):
+        return f"{self.milestone_name} ({self.brand_store.store_offer_name})"

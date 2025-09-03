@@ -1,10 +1,32 @@
 import requests
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from django.shortcuts import get_object_or_404
 from .models import BrandStore
+from .serializers import BrandStoreSerializer
 
+
+# 🔹 Create BrandStore with milestones
+class BrandStoreCreateAPIView(generics.CreateAPIView):
+    queryset = BrandStore.objects.all()
+    serializer_class = BrandStoreSerializer
+
+
+# 🔹 List all BrandStores (with milestones)
+class BrandStoreListAPIView(generics.ListAPIView):
+    queryset = BrandStore.objects.all()
+    serializer_class = BrandStoreSerializer
+
+
+# 🔹 Retrieve, Update, Delete a single BrandStore
+class BrandStoreDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BrandStore.objects.all()
+    serializer_class = BrandStoreSerializer
+    lookup_field = "id"
+
+
+# 🔹 Postback handler (your original logic)
 class BrandStorePostbackView(APIView):
     def post(self, request):
         brand_store_id = request.data.get('brand_store_id')
@@ -34,5 +56,7 @@ class BrandStorePostbackView(APIView):
         except Exception as e:
             print(f"Callback error: {e}")
 
-        return Response({"status": "success", "message": "Postback recorded and callback sent"}, status=status.HTTP_200_OK)
-
+        return Response(
+            {"status": "success", "message": "Postback recorded and callback sent"},
+            status=status.HTTP_200_OK
+        )

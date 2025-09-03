@@ -1,6 +1,12 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import BrandStore
+from .models import BrandStore, BrandStoreMilestone
+
+
+class BrandStoreMilestoneInline(admin.TabularInline):
+    model = BrandStoreMilestone
+    extra = 1
+
 
 @admin.register(BrandStore)
 class BrandStoreAdmin(admin.ModelAdmin):
@@ -9,9 +15,6 @@ class BrandStoreAdmin(admin.ModelAdmin):
         "store_offer_name",
         "vendor_name",
         "company_name",
-        "milestone_name",
-        "milestone_type",
-        "milestone_payout",
         "brand_store_task_payout",
         "brand_store_referral_payout",
         "featured_offer",
@@ -19,7 +22,7 @@ class BrandStoreAdmin(admin.ModelAdmin):
         "brand_store_sub_category",
         "start_date",
         "end_date",
-        "brand_logo_preview",  # 👈 small preview in list view
+        "brand_logo_preview",  # ✅ method inside admin
     )
 
     search_fields = (
@@ -51,7 +54,9 @@ class BrandStoreAdmin(admin.ModelAdmin):
         "carousel_image_4_preview",
     )
 
-    # 🖼️ Custom preview methods
+    inlines = [BrandStoreMilestoneInline]
+
+    # ✅ Preview methods MUST be defined inside this class
     def brand_logo_preview(self, obj):
         if obj.brand_logo:
             return format_html('<img src="{}" width="80" height="80" style="object-fit:contain;" />', obj.brand_logo.url)
@@ -83,3 +88,4 @@ class BrandStoreAdmin(admin.ModelAdmin):
         if obj.carousel_image_4:
             return format_html('<img src="{}" width="100" height="60" style="object-fit:contain;" />', obj.carousel_image_4.url)
         return "No Image"
+
