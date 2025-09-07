@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'scratchcards',
     'spinwheel',
     'performandearn',
+    'shareandearn',
 
 ]
 
