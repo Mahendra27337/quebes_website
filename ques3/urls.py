@@ -2,6 +2,9 @@ from django.urls import path
 from .views import ReferralView, RegisterAPIView, LoginAPIView, TaskCreateAPIView, TaskListAPIView, OfferCompleteAPIView, ReferralHistoryAPIView
 from .views import ContestCreateAPIView, ContestListAPIView, BannerCreateAPIView, BannerListAPIView
 from .views import TaskCreateAPIView, TaskPostbackAPIView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import UserProfileViewSet
 urlpatterns = [
     path('register/', RegisterAPIView.as_view()),
     path('login/', LoginAPIView.as_view()),
@@ -16,6 +19,13 @@ urlpatterns = [
       path('task/create/', TaskCreateAPIView.as_view(), name='task-create'),
     path('task/postback/', TaskPostbackAPIView.as_view(), name='task-postback'),
     path("referrals/", ReferralView.as_view(), name="referrals"),
+]
+
+router = DefaultRouter()
+router.register(r"user-profiles", UserProfileViewSet)
+
+urlpatterns = [
+    path("", include(router.urls)),
 ]
 
 

@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
+from ques3.views import LoginAPIView, RegisterAPIView
 from trialstore.views import (
     TrialVendorViewSet, TrialProductViewSet, TrialProductCarouselViewSet,
     TrialProductMilestoneViewSet, TrialStoreAdViewSet, TrialStoreFeedbackViewSet
@@ -11,6 +12,8 @@ from trialstore.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('ques3.urls')),
+    path('register/', RegisterAPIView.as_view()),
+    path('login/', LoginAPIView.as_view()),
     path('api/brandstore/', include('brandstore.urls')),
     path("digitalstore/", include("digitalstore.urls")),
     path("api/trialstore/", include("trialstore.urls")),

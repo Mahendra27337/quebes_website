@@ -7,6 +7,11 @@ from django.contrib.auth.models import User
 from .models import UserProfile, ReferralIncome
 from .serializers import ReferralSerializer
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import UserProfile
+from .serializers import UserProfileSerializer
+from .filters import UserProfileFilter
 
 
 class RegisterAPIView(APIView):
@@ -25,6 +30,14 @@ class LoginAPIView(APIView):
         if user:
             return Response({"message": "Login successful"})
         return Response({"message": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+    
+class UserProfileViewSet(viewsets.ModelViewSet):
+  queryset = UserProfile.objects.all()
+serializer_class = UserProfileSerializer
+filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+filterset_class = UserProfileFilter
+search_fields = ["name", "city", "state", "profession", "industry", "primary_language"]
+ordering_fields = ["annual_income", "credit_score", "experience_years"]
     
 class ReferralView(APIView):
     permission_classes = [IsAuthenticated]
