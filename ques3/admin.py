@@ -160,3 +160,35 @@ class UserProfileAdmin(admin.ModelAdmin):
             "fields": ("illness", "medications")
         }),
     )
+
+
+    # ----------------------
+    # Bulk Admin Actions
+    # ----------------------
+    actions = ["assign_task", "assign_contest", "mark_as_targeted"]
+
+    def assign_task(self, request, queryset):
+        """Bulk assign a default Task to selected users"""
+        task = Task.objects.first()  # TODO: Replace with selection logic
+        for profile in queryset:
+            # link task to profile if you have a UserTask model
+            print(f"Assigned {task} to {profile.user}")
+        self.message_user(request, f"{queryset.count()} users assigned to task {task}.")
+
+    assign_task.short_description = "Assign Task to selected users"
+
+    def assign_contest(self, request, queryset):
+        """Bulk assign a default Contest to selected users"""
+        contest = Contest.objects.first()
+        for profile in queryset:
+            print(f"Assigned {contest} to {profile.user}")
+        self.message_user(request, f"{queryset.count()} users assigned to contest {contest}.")
+
+    assign_contest.short_description = "Assign Contest to selected users"
+
+    def mark_as_targeted(self, request, queryset):
+        """Mark selected users as targeted"""
+        queryset.update(open_to_travel=True)  # Example flag
+        self.message_user(request, f"{queryset.count()} users marked as targeted.")
+
+    mark_as_targeted.short_description = "Mark selected users as targeted"
